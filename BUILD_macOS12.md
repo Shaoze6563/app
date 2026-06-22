@@ -35,7 +35,7 @@ xcodebuild -project Focus.xcodeproj -scheme Focus -configuration Release \
    cd Focus-src
    git init && git add . && git commit -m "Focus build targeting macOS 12"
    git branch -M main
-   git remote add origin https://github.com/你的用户名/你的仓库.git
+   git remote add origin https://github.com/Shaoze6563/app.git
    git push -u origin main
    ```
 2. 推送后 Actions 会自动开始；也可在仓库 “Actions” 标签页手动点 “Run workflow”。

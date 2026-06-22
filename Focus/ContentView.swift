@@ -86,7 +86,7 @@ struct ContentView: View {
                             .scaleEffect(isHoveringStatistics ? 1.1 : 1.0)
                     }
                     .buttonStyle(.plain)
-                    .focusEffectDisabled()
+                    .compatFocusEffectDisabled()
                     .help("数据统计")
                     .onHover { hovering in
                         withAnimation(.easeInOut(duration: 0.1)) {
@@ -110,7 +110,7 @@ struct ContentView: View {
                             .scaleEffect(isHoveringSettings ? 1.1 : 1.0)
                     }
                     .buttonStyle(.plain)
-                    .focusEffectDisabled()
+                    .compatFocusEffectDisabled()
                     .help("设置")
                     .onHover { hovering in
                         withAnimation(.easeInOut(duration: 0.1)) {
@@ -196,7 +196,7 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                     .clipShape(Circle())
                     .disabled(timerManager.isWorkMode && timerManager.minutes == 0 && timerManager.seconds == 0)
-                    .focusEffectDisabled()
+                    .compatFocusEffectDisabled()
                     .onHover { hovering in // Add hover effect
                         withAnimation(.easeInOut(duration: 0.1)) {
                             isHoveringPlayPause = hovering
@@ -274,4 +274,28 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(TimerManager.shared)
+}
+
+
+// MARK: - macOS 12 兼容性辅助（自动添加）
+extension View {
+    /// macOS 14+ 使用 focusEffectDisabled()，更低系统为无操作
+    @ViewBuilder
+    func compatFocusEffectDisabled() -> some View {
+        if #available(macOS 14.0, *) {
+            self.focusEffectDisabled()
+        } else {
+            self
+        }
+    }
+
+    /// macOS 13+ 使用数字内容过渡动画，更低系统为无操作
+    @ViewBuilder
+    func compatNumericContentTransition() -> some View {
+        if #available(macOS 13.0, *) {
+            self.contentTransition(.numericText())
+        } else {
+            self
+        }
+    }
 }

@@ -174,7 +174,7 @@ struct SettingsView: View {
                         .scaleEffect(isHoveringClose ? 1.1 : 1.0)
                 }
                 .buttonStyle(PlainButtonStyle())
-                .focusEffectDisabled()
+                .compatFocusEffectDisabled()
                 .onHover { hovering in
                     withAnimation(.easeInOut(duration: 0.1)) {
                         isHoveringClose = hovering
@@ -957,7 +957,7 @@ struct ModernToggleStyle: ToggleStyle {
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(configuration.isOn ? Color.accentColor : Color(.tertiarySystemFill))
+                        .fill(configuration.isOn ? Color.accentColor : Color.gray.opacity(0.25))
                         .frame(width: 44, height: 26)
                         .shadow(
                             color: DesignSystem.Shadow.subtle.color,

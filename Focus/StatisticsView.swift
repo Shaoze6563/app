@@ -222,7 +222,10 @@ struct StatisticsView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(.controlBackgroundColor).opacity(0.6))
-                        .stroke(Color(.separatorColor).opacity(0.3), lineWidth: 1)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color(.separatorColor).opacity(0.3), lineWidth: 1)
+                        )
                 )
                 
                 // 图表内容
@@ -689,7 +692,7 @@ struct ModernSummaryCard: View {
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
                     .lineLimit(1)
-                    .contentTransition(.numericText())
+                    .compatNumericContentTransition()
                 
                 if !subtitle.isEmpty {
                     Text(subtitle)
@@ -1245,7 +1248,10 @@ struct EmptyChartView: View {
                 .background(
                     Capsule()
                         .fill(Color.blue.opacity(0.1))
-                        .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                        )
                 )
                 .opacity(showContent ? 1.0 : 0.0)
                 .scaleEffect(showContent ? 1.0 : 0.8)
