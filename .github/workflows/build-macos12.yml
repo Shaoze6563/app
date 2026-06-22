@@ -1,0 +1,44 @@
+name: Build Focus (macOS 12 compatible)
+
+on:
+  workflow_dispatch:      # 允许在 Actions 页面手动点 “Run workflow”
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: macos-14     # GitHub 提供的 Mac 构建机，自带 Xcode
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build (deployment target 12.0, unsigned)
+        run: |
+          xcodebuild \
+            -project Focus.xcodeproj \
+            -target Focus \
+            -configuration Release \
+            -derivedDataPath build \
+            MACOSX_DEPLOYMENT_TARGET=12.0 \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Ad-hoc sign the app
+        run: |
+          APP="build/Build/Products/Release/Focus.app"
+          codesign --force --deep --sign - "$APP"
+          codesign -dv "$APP" || true
+          /usr/libexec/PlistBuddy -c "Print :LSMinimumSystemVersion" "$APP/Contents/Info.plist" || true
+
+      - name: Zip the app
+        run: |
+          cd build/Build/Products/Release
+          ditto -c -k --sequesterRsrc --keepParent Focus.app Focus-macOS12.zip
+
+      - name: Upload built app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Focus-macOS12
+          path: build/Build/Products/Release/Focus-macOS12.zip
